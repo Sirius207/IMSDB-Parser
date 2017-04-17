@@ -1,0 +1,28 @@
+{
+  "name": "imsdb-parser",
+  "version": "1.0.0",
+  "description": "A movie script parser for IMSDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sirius207/IMSDB-Parser.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sirius207/IMSDB-Parser/issues"
+  },
+  "homepage": "https://github.com/Sirius207/IMSDB-Parser#readme",
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0"
+  },
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "request": "^2.81.0"
+  }
+}
