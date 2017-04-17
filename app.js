@@ -1,23 +1,39 @@
-const parser = require('./parseMovieLinks.js');
-const movieLinks = require('./movieLinks.json');
 const fs = require('fs');
+const parser = require('./parseMovieLinks.js');
+const scriptLinks = require('./scriptLinks.json');
+
 
 const getBodyByLink = parser.getBodyByLink;
 
 const URL = 'http://www.imsdb.com';
 
-const buildScriptLinks = async () => {
-  const scriptLinks = {};
-  for(const movieName in movieLinks) {
-    const $singleMovieBody = await getBodyByLink(movieLinks[movieName]);
-    const singleScriptLink = $singleMovieBody('.script-details a').last().attr('href'); 
-    console.log(singleScriptLink);
-    scriptLinks[movieName] = URL + singleScriptLink;
+const single = {};
+
+const getSingleScript = async () => {
+  const $singleScriptBody = await getBodyByLink('http://www.imsdb.com/scripts/La-La-Land.html');
+  const singleScript = $singleScriptBody('pre').children();
+  // console.log(singleScript);
+  for (const key in singleScript) {
+    if (singleScript[key].children && singleScript[key].next.data) {
+      // console.log(singleScript[key].children[0].data);
+      // console.log(singleScript[key].next.data);
+      const role = singleScript[key].children[0].data.replace(/\s\s+/g, '').replace(/\r\n/g, '').replace(" (CONT'D)", '');
+      const content = singleScript[key].next.data.replace(/\r\n/g, '').replace(/\s\s+/g, ' ');
+      if (!single[role] && isNaN(role[0])) {
+        single[role] = [];
+        single[role].push(content);
+      } else if (isNaN(role[0])) {
+        single[role].push(content);
+      }
+    } else {
+      break;
+    }
   }
-  fs.writeFileSync('scriptLinks.json', JSON.stringify(scriptLinks));
+  fs.writeFileSync('single5.json', JSON.stringify(single));
 }
 
-buildScriptLinks();
+getSingleScript();
+
 
 
 

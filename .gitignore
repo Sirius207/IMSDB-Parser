@@ -3,4 +3,5 @@ config/
 .DS_Store
 .vscode
 result.json
+script
 
