@@ -1,7 +1,7 @@
 const fs = require('fs');
 const request = require('request');
 const cheerio = require('cheerio');
-const movieLinks = require('./movieLinks.json');
+const movieLinks = require('./links/movieLinks.json');
 
 const URL = 'http://www.imsdb.com';
 
@@ -77,7 +77,7 @@ const buildScriptLinkJson = async () => {
     scriptLinks[movieName] = URL + singleScriptLink;
   }
   fs.writeFileSync('scriptLinks.json', JSON.stringify(scriptLinks));
-}
+};
 
 module.exports = {
   getBodyByLink,

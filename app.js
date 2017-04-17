@@ -1,7 +1,6 @@
 const fs = require('fs');
 const parser = require('./parseMovieLinks.js');
-const scriptLinks = require('./scriptLinks.json');
-
+const scriptLinks = require('./links/scriptLinks.json');
 
 const getBodyByLink = parser.getBodyByLink;
 
@@ -17,7 +16,12 @@ const getSingleScript = async () => {
     if (singleScript[key].children && singleScript[key].next.data) {
       // console.log(singleScript[key].children[0].data);
       // console.log(singleScript[key].next.data);
-      const role = singleScript[key].children[0].data.replace(/\s\s+/g, '').replace(/\r\n/g, '').replace(" (CONT'D)", '');
+      const role = singleScript[key].children[0].data
+        .replace(/\s\s+/g, '')
+        .replace(/\r\n/g, '')
+        .replace(" (CONT'D)", '')
+        .replace(' (O.S.)', '');
+
       const content = singleScript[key].next.data.replace(/\r\n/g, '').replace(/\s\s+/g, ' ');
       if (!single[role] && isNaN(role[0])) {
         single[role] = [];
@@ -29,7 +33,12 @@ const getSingleScript = async () => {
       break;
     }
   }
-  fs.writeFileSync('single5.json', JSON.stringify(single));
+  for (const name in single){
+    if (single[name].length < 2) {
+      delete single[name];
+    }
+  }
+  fs.writeFileSync('scripts/single6_noOneTalk.json', JSON.stringify(single));
 }
 
 getSingleScript();
