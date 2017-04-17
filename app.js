@@ -1,23 +1,32 @@
-const request = require('request');
-const cheerio = require('cheerio');
+const parser = require('./parseMovieLinks.js');
+const movieLinks = require('./movieLinks.json');
 const fs = require('fs');
 
-request({
-  url: 'http://www.imsdb.com/scripts/La-La-Land.html',
-  method: 'GET',
-}, (err, response, body) => {
-  if (err || !body) {
-    console.log(err);
-  } else {
-    const $ = cheerio.load(body);
-    const result = [];
-    const script = $('pre');
-    for (let i = 0; i < script.length; i += 1) {
-      result.push($(script[i]).text());
-    }
-    fs.writeFileSync('result.json', JSON.stringify(result));
+const getBodyByLink = parser.getBodyByLink;
+
+const URL = 'http://www.imsdb.com';
+
+const buildScriptLinks = async () => {
+  const scriptLinks = {};
+  for(const movieName in movieLinks) {
+    const $singleMovieBody = await getBodyByLink(movieLinks[movieName]);
+    const singleScriptLink = $singleMovieBody('.script-details a').last().attr('href'); 
+    console.log(singleScriptLink);
+    scriptLinks[movieName] = URL + singleScriptLink;
   }
-});
+  fs.writeFileSync('scriptLinks.json', JSON.stringify(scriptLinks));
+}
+
+buildScriptLinks();
+
+
+
+
+
+
+
+
+
 
 
 
