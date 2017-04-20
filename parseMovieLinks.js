@@ -74,7 +74,9 @@ const buildScriptLinkJson = async () => {
     const $singleMovieBody = await getBodyByLink(movieLinksFile[movieName]);
     const singleScriptLink = $singleMovieBody('.script-details a').last().attr('href'); 
     // console.log(singleScriptLink);
-    scriptLinks[movieName] = URL + singleScriptLink;
+    if (!singleScriptLink.includes('genre')) {
+      scriptLinks[movieName] = URL + singleScriptLink;
+    }
   }
   fs.writeFileSync('scriptLinks.json', JSON.stringify(scriptLinks));
 };
