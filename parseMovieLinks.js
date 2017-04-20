@@ -1,7 +1,7 @@
 const fs = require('fs');
 const request = require('request');
 const cheerio = require('cheerio');
-const movieLinks = require('./links/movieLinks.json');
+const movieLinksFile = require('./links/movieLinks.json');
 
 const URL = 'http://www.imsdb.com';
 
@@ -70,8 +70,8 @@ const buildMovieLinkJson = async () => {
 // create script links json file from movieLinks json file
 const buildScriptLinkJson = async () => {
   const scriptLinks = {};
-  for(const movieName in movieLinks) {
-    const $singleMovieBody = await getBodyByLink(movieLinks[movieName]);
+  for(const movieName in movieLinksFile) {
+    const $singleMovieBody = await getBodyByLink(movieLinksFile[movieName]);
     const singleScriptLink = $singleMovieBody('.script-details a').last().attr('href'); 
     // console.log(singleScriptLink);
     scriptLinks[movieName] = URL + singleScriptLink;

@@ -13,23 +13,27 @@ const getSingleScript = async () => {
   const singleScript = $singleScriptBody('pre').children();
   // console.log(singleScript);
   for (const key in singleScript) {
-    if (singleScript[key].children && singleScript[key].next.data) {
-      // console.log(singleScript[key].children[0].data);
-      // console.log(singleScript[key].next.data);
+    if (singleScript[key].children && singleScript[key].next && singleScript[key].next.data) {
+      console.log(singleScript[key].children[0].data);
+      console.log(singleScript[key].next.data);
       const role = singleScript[key].children[0].data
         .replace(/\s\s+/g, '')
         .replace(/\r\n/g, '')
         .replace(" (CONT'D)", '')
         .replace(' (O.S.)', '');
 
-      const content = singleScript[key].next.data.replace(/\r\n/g, '').replace(/\s\s+/g, ' ');
+      const content = singleScript[key].next.data
+        .split('\r\n\r\n')[0]
+        .replace(/\r\n/g, '')
+        .replace(/\s\s+/g, ' ')
+        .split('Revision')[0];
       if (!single[role] && isNaN(role[0])) {
         single[role] = [];
         single[role].push(content);
       } else if (isNaN(role[0])) {
         single[role].push(content);
       }
-    } else {
+    } else if (!singleScript[key].next) {
       break;
     }
   }
@@ -38,7 +42,7 @@ const getSingleScript = async () => {
       delete single[name];
     }
   }
-  fs.writeFileSync('scripts/single6_noOneTalk.json', JSON.stringify(single));
+  fs.writeFileSync('scripts/single7_fullTalk.json', JSON.stringify(single));
 }
 
 getSingleScript();
