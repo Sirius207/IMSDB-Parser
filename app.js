@@ -69,20 +69,16 @@ const getSingleScript = async (movieName, singleSriptLink) => {
   return single;
 };
 
-// getSingleScript('12', 'http://www.imsdb.com/scripts/La-La-Land.html');
 
-
-
-const scriptLinksFile = require('./links/scriptLinks2.json');
 
 const parseEveryScripts = async () => {
   const fullScripts = { list: [] };
-  await Promise.all(Object.keys(scriptLinksFile).map(async (movieName) => {
+  await Promise.all(Object.keys(scriptLinks).map(async (movieName) => {
     const newMovieName = (movieName.includes(', The Script'))
       ? movieName.replace(', The Script', '').replace(/^/, 'The ')
       : movieName.replace(' Script', '');
 
-    const single = await getSingleScript(newMovieName, scriptLinksFile[movieName]);
+    const single = await getSingleScript(newMovieName, scriptLinks[movieName]);
     fullScripts.list.push(single);
   }));
   return fullScripts;
@@ -90,7 +86,7 @@ const parseEveryScripts = async () => {
 
 const buildMovieScriptJson = async () => {
   const fullScripts = await parseEveryScripts();
-  console.log(fullScripts);
+  // console.log(fullScripts);
   await fs.writeFileSync('scripts/fullScript.json', JSON.stringify(fullScripts));
 };
 
