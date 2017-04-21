@@ -11,8 +11,11 @@ const getBodyByLink = (link) => {
     request({
       url: link,
       method: 'GET',
+      family: 4,
     }, (err, response, body) => {
       if (err || !body) {
+        console.log(link);
+        console.log('getBodyError: ' + err);
         reject(err);
       } else {
         const $body = cheerio.load(body);
