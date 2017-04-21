@@ -93,7 +93,9 @@ const parseEveryScripts = () => {
         const singleScript = await getSingleScript(newMovieName, scriptLinks[movieName]);
         console.log(realIndex + ': ' + index + ': ' + singleScript.movie);
         console.log(' ' + singleScript.script.length + ' roles');
-        realIndex += 1;
+        if (singleScript.script.length > 0) {
+          realIndex += 1;
+        }
         resolve(singleScript);
       }, index * 500);
     });
@@ -109,8 +111,7 @@ const parseEveryScripts = () => {
 const buildMovieScriptJson = async () => {
   console.log('START - scriptLinks count: ' + Object.keys(scriptLinks).length);
   const fullScripts = { list: [] };
-  fullScripts.li
-  st = await parseEveryScripts();
+  fullScripts.list = await parseEveryScripts();
   console.log('FINISH - fullScripts count: ' + Object.keys(fullScripts.list).length);
   fs.writeFileSync('scripts/full_2.json', JSON.stringify(fullScripts));
 };
